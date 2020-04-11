@@ -1,7 +1,24 @@
-.customClassFromFile {
-    color: red;
+@import './shared/fonts';
+@import './index';
+@import './shared/header';
+
+html, body {
+    height:100%;
+    width:100%;
+    font-family: 'Oswald', 'Helvetica';
 }
 
-.customClassForPosts {
-    color: blue;
+.self-typed {
+    font-size: 35px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: white;
 }
+
+.absolute {
+    position: absolute;
+  }
+  
+  .base-page {
+      padding-top: 150px;
+  }
