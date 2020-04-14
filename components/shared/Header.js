@@ -1,40 +1,3 @@
-// import React from 'react';
-// import Link from 'next/link';
-
-// class Header extends React.Component {
-
-//     render() {
-
-//         return (
-//             <React.Fragment>
-                // <Link href = "/">
-                //     <a className = "customClassFromFile"> Home</a>
-                // </Link>
-
-                // <Link href = "/about">
-                //     <a> About</a>
-                // </Link>
-
-//                 <Link href = "/blogs">
-//                     <a> Blogs</a>
-//                 </Link>
-                
-//                 <Link href = "/portfolios">
-//                     <a> Porfolios</a>
-//                 </Link>
-
-//                 <Link href = "/cv">
-//                     <a> Cv</a>
-//                 </Link>
-//                 {/* <NextLink route='/test/1'>Test 1</NextLink>
-//                 <NextLink route='/test/2'>Test 2</NextLink> */}
-//             </React.Fragment>
-//         )
-//     }
-// }
-
-// export default Header;
-
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -45,6 +8,8 @@ import {
   Nav,
   NavItem
 } from 'reactstrap';
+
+import auth0 from '../../services/auth0';
 
 const Example = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -73,9 +38,16 @@ const Example = (props) => {
             <NavItem className="port-navbar-item">
               <BsNavLink route="/cv" title="Cv" />
             </NavItem>
-            <NavItem className="port-navbar-item">
+            { auth0.isAuthenticated() === false &&
+              <NavItem className="port-navbar-item">
               <Login/>
-            </NavItem>
+              </NavItem>
+            }
+            { auth0.isAuthenticated() && 
+              <NavItem className="port-navbar-item">
+              <Logout/>
+              </NavItem>
+            }
           </Nav>
         </Collapse>
       </Navbar>
@@ -97,7 +69,13 @@ const BsNavLink = (props) => {
 
 const Login = () => {
   return (
-    <span className="nav-link port-navbar-link">Login</span>
+    <span onClick={auth0.login} className="nav-link port-navbar-link clickable">Login</span>
+  )
+}
+
+const Logout = () => {
+  return (
+    <span onClick={auth0.logout} className="nav-link port-navbar-link clickable">Logout</span>
   )
 }
 

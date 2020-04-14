@@ -1,5 +1,7 @@
 import React from 'react';
-import App, {Container} from 'next/app';
+import App from 'next/app';
+
+import auth0 from '../services/auth0';
 
 //styling
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,7 +9,10 @@ import '../styles/main.scss'
 
 export default class MyApp extends App {
     static async getInitialProps({Component, router, ctx}) {
-        let pageProps = {}
+        let pageProps = {};
+        const isAuthenticated = process.browser ? auth0.clientAuth() : auth0.serverAuth(ctx.req);
+
+        console.log(isAuthenticated);
 
         if (Component.getInitialProps) {
             pageProps = await Component.getInitialProps(ctx)
@@ -17,12 +22,10 @@ export default class MyApp extends App {
     }
 
     render () {
-        const { Component, pageProps } = this.props
+        const { Component, pageProps} = this.props
 
         return (
-            <Container>
                 <Component {...pageProps} />
-            </Container>
         )
     }
 }
