@@ -16,6 +16,8 @@ const Example = (props) => {
 
   const toggle = () => setIsOpen(!isOpen);
 
+  const {isAuthenticated , user} = props;
+
   return (
     <div>
       <Navbar className="port-navbar port-default absolute" color="transparent" dark expand="md">
@@ -38,14 +40,21 @@ const Example = (props) => {
             <NavItem className="port-navbar-item">
               <BsNavLink route="/cv" title="Cv" />
             </NavItem>
-            { auth0.isAuthenticated() === false &&
+            {/* !auth0.isAuthenticated() */}
+            { !isAuthenticated &&
               <NavItem className="port-navbar-item">
               <Login/>
               </NavItem>
             }
-            { auth0.isAuthenticated() && 
+            {/* auth0.isAuthenticated() */}
+            { isAuthenticated && 
               <NavItem className="port-navbar-item">
               <Logout/>
+              </NavItem>
+            }
+            { isAuthenticated && 
+              <NavItem className="port-navbar-item">
+              <span className ="nav-link port-navbar-link clickable">{user.name}</span>
               </NavItem>
             }
           </Nav>

@@ -1,5 +1,6 @@
 import auth0 from 'auth0-js';
 import Cookies from 'js-cookie';
+import jwt from 'jsonwebtoken';
 
 class Auth0 {
     
@@ -15,7 +16,7 @@ class Auth0 {
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
         this.handleAuthentication = this.handleAuthentication.bind(this);
-        this.isAuthenticated = this.isAuthenticated.bind(this);
+        // this.isAuthenticated = this.isAuthenticated.bind(this);
     }
 
     handleAuthentication() {
@@ -34,7 +35,7 @@ class Auth0 {
     }
 
     setSession(authResult) {
-        const expiresAt =JSON.stringify((authResult.expiresIn = 1000) + new Date().getTime());
+        const expiresAt =JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
         // localStorage.setItem('access_token', authResult.accessToken);
 
         Cookies.set('user', authResult.idTokenPayload);
@@ -56,39 +57,53 @@ class Auth0 {
     login() {
         this.auth0.authorize();
     }
+    
+    // isAuthenticated() {
+    //     const expiresAt = Cookies.getJSON('expiresAt');
+    //     return new Date().getTime() < expiresAt;
+    // }
 
-    isAuthenticated() {
-        const expiresAt = Cookies.getJSON('expiresAt');
-        return new Date().getTime() < expiresAt;
+    verifyToken(token) {
+        if(token) {
+            const decodedToken = jwt.decode(token);
+            const expiresAt = decodedToken.exp = 1000;
+
+            return (decodedToken && new Date().getTime() < expiresAt) ? decodedToken : undefined;
+        }
     }
 
     clientAuth() {
-        return this.isAuthenticated();
+        const token = Cookies.getJSON('jwt');
+        const verifiedToken = this.verifyToken(token);
+
+        return verifiedToken;
     }
 
     serverAuth(req) {
         if (req.headers.cookie) {
-            // const expiresAtCookie = req.headers.cookie.split(';').find(c => c.trim().startsWith('expiresAt='));
+            const tokenCookie = req.headers.cookie.split(';').find(c => c.trim().startsWith('jwt='));
 
-            const cookies = req.headers.cookie;
-            console.log(cookies);
-            const splitedCookies = cookies.split(';');
-            console.log(splitedCookies);
-            const expiresAtCookie = splitedCookies.find(c => c.trim().startsWith('expiresAt='));
-            console.log(expiresAtCookie);
+            // const cookies = req.headers.cookie;
+            // console.log(cookies);
+            // const splitedCookies = cookies.split(';');
+            // console.log(splitedCookies);
+            // const expiresAtCookie = splitedCookies.find(c => c.trim().startsWith('expiresAt='));
+            // console.log(expiresAtCookie);
             // if (!expiresAtCookie) {return undefined};
-            const expiresAtArray = expiresAtCookie.split('=');
-            console.log(expiresAtArray);
-            const expiresAt = expiresAtArray[1];
-            console.log(expiresAt);
-
-            // if (!expiresAtCookie) {return undefined};
-
-            // const expiresAt = expiresAtCookie.split('=')[1];
+            // const expiresAtArray = expiresAtCookie.split('=');
+            // console.log(expiresAtArray);
+            // const expiresAt = expiresAtArray[1];
             // console.log(expiresAt);
 
-            return new Date().getTime() < expiresAt;
+            if (!tokenCookie) {return undefined};
+
+            const token = tokenCookie.split('=')[1];
+            const verifiedToken = this.verifyToken(token);
+
+            return verifiedToken;
         }
+
+        return undefined;
     }
 }
 
