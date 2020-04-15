@@ -66,7 +66,7 @@ class Auth0 {
     verifyToken(token) {
         if(token) {
             const decodedToken = jwt.decode(token);
-            const expiresAt = decodedToken.exp = 1000;
+            const expiresAt = decodedToken.exp * 1000;
 
             return (decodedToken && new Date().getTime() < expiresAt) ? decodedToken : undefined;
         }
@@ -82,6 +82,7 @@ class Auth0 {
     serverAuth(req) {
         if (req.headers.cookie) {
             const tokenCookie = req.headers.cookie.split(';').find(c => c.trim().startsWith('jwt='));
+            console.log(tokenCookie);
 
             // const cookies = req.headers.cookie;
             // console.log(cookies);
@@ -98,7 +99,10 @@ class Auth0 {
             if (!tokenCookie) {return undefined};
 
             const token = tokenCookie.split('=')[1];
+            console.log(token);
             const verifiedToken = this.verifyToken(token);
+
+            console.log(verifiedToken);
 
             return verifiedToken;
         }

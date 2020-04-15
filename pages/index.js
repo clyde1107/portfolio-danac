@@ -43,7 +43,7 @@ class Index extends React.Component {
                         <Col md="6" className="hero-welcome-wrapper">
                         <div className="hero-welcome-text">
                             <h1>
-                            { isAuthenticated && <span> <b> Name Here {user.name } </b> </span>}
+                            { isAuthenticated && <span > <b> {user.name } </b> </span>}
                             Welcome my portfolio website.
                             Get informed, collaborate and discover projects I was working on through the years!
                             </h1>

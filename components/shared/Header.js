@@ -11,12 +11,13 @@ import {
 
 import auth0 from '../../services/auth0';
 
-const Example = (props) => {
+const Header = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
 
   const {isAuthenticated , user} = props;
+  console.log(isAuthenticated)
 
   return (
     <div>
@@ -64,7 +65,7 @@ const Example = (props) => {
   );
 }
 
-export default Example;
+export default Header;
 
 const BsNavLink = (props) => {
   const {route, title} = props;
