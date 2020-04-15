@@ -82,7 +82,6 @@ class Auth0 {
     serverAuth(req) {
         if (req.headers.cookie) {
             const tokenCookie = req.headers.cookie.split(';').find(c => c.trim().startsWith('jwt='));
-            console.log(tokenCookie);
 
             // const cookies = req.headers.cookie;
             // console.log(cookies);

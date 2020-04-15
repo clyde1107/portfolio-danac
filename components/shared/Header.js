@@ -17,7 +17,6 @@ const Header = (props) => {
   const toggle = () => setIsOpen(!isOpen);
 
   const {isAuthenticated , user} = props;
-  console.log(isAuthenticated)
 
   return (
     <div>
