@@ -34,12 +34,12 @@ const Header = (props) => {
             <NavItem className="port-navbar-item">
               <BsNavLink route="/portfolios" title="Portfolios" />
             </NavItem>
-            <NavItem className="port-navbar-item">
+            {/* <NavItem className="port-navbar-item">
               <BsNavLink route="/blogs" title="Blog" />
             </NavItem>
             <NavItem className="port-navbar-item">
               <BsNavLink route="/cv" title="Cv" />
-            </NavItem>
+            </NavItem> */}
             {/* !auth0.isAuthenticated() */}
             { !isAuthenticated &&
               <NavItem className="port-navbar-item">
